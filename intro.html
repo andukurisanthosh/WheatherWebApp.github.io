@@ -1,0 +1,57 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./weather-app.css">
+</head>
+
+<body>
+
+
+    <div class="header">Weather App</div>
+    <div class="container">
+        <button onclick="getLocation()" class="btn">Check Weather</button>
+        <div class="content">
+            <p id="temprature"> </p>
+            <p id="weather"> </p>
+            <p id="location"> </p>
+        </div>        
+    </div>
+
+    <script>
+
+        const temp = document.getElementById('temprature');
+        const loc = document.getElementById('location');
+        const wea = document.getElementById('weather');
+        const kelvin = 273;
+
+        function getLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition((position) => {
+                    let lon = position.coords.longitude
+                    let la = position.coords.latitude
+
+                    const api = "6468e0ab85abd6cd8efdd4d9bd63ed18"
+                    const base = `https://api.openweathermap.org/data/2.5/weather?lat=${la}&lon=${lon}&appid=${api}`
+
+                    fetch(base)
+                        .then((responce) => { return responce.json() })
+                        .then((data) => {
+                            console.log(data)
+                            temp.textContent = Math.floor(data.main.temp - kelvin) + "°C";
+                            loc.textContent = data.name;
+                            wea.textContent = data.weather[0].description
+                        })
+                });
+            }
+            else {
+                element.innerHTML = "Geolocation is not supported by this browser."
+            }
+        }
+    </script>
+</body>
+
+</html>
